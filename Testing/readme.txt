@@ -20,3 +20,5 @@ from boinctasks:  of length 0
 
 
 The Boinctasks "task" display for the above is named "linux_nv_temps.png"
+
+note that the Boinc GPU devices numbered d0, d1, etc will not match the above as boinc sorts GPUS by performance with d0 the best followed by d1,etc down to the slowest GPU.  The numbers above for GPU come from the nvidia-smi program that works directly with the device though the driver
