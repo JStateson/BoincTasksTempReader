@@ -15,7 +15,7 @@ CPU temps  <CT0 40><CT1 39><CT2 39><CT3 38>
 max NVidia temp  <TG 62.5>
 NV temps  <GT0 61><GT1 55><GT2 56><GT3 82><GT4 57><GT5 64>
 from boinctasks: <BT> of length 5
-sent:  <TThrottle><HN:h110btc><PV 7.72><AC 0><TC 39.0><TG 62.5><NV 6><NA 0><DC 100><DG 100><CT0 40><CT1 39><CT2 39><CT3 38><GT0 61><GT1 55><GT2 56><GT3 82><GT4 57><GT5 6                                                                    4><RS?G_jWJt><AA1><SC77><SG80><XC100><MC2><TThrottle>
+sent:  <TThrottle><HN:h110btc><PV 7.72><AC 0><TC 39.0><TG 62.5><NV 6><NA 0><DC 100><DG 100><CT0 40><CT1 39><CT2 39><CT3 38><GT0 61><GT1 55><GT2 56><GT3 82><GT4 57><GT5 64><RS?G_jWJt><AA1><SC77><SG80><XC100><MC2><TThrottle>
 from boinctasks:  of length 0
 
 
