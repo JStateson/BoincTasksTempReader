@@ -1,14 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+#  s_ string, n_ numeric , r_ raw values, h_ header of string under construction,  m_ max value (numeric)
+
 
 import time
 import socket
 import os
-
+import random
+import string
+import signal
+import sys
 
 port=31417
 hostname=os.uname()[1]
 host=""  # this seems to work better than 127.0.0.1
+
 
 # AC is active
 # TC is max temp of cpu
@@ -20,7 +26,18 @@ strPrefix= strHeader + "<PV 7.72><AC 0>"  #<TC 22><TG 31>"
 # %100 for cpu and gpu
 # the nvidia values can fbe found in nvidia-smi if useful
 strPCT="<DC 100><DG 100>"
-strENDING="<RS?G_jWJt><AA1><SC77><SG80><XC100><MC2><TThrottle>"
+
+strRND7 = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(7)])
+# AA will be marked as inactive, max and min of CPU not neeeded (XC, MC) 
+# probably could put average core temp into SC  but not useful and not sure what it is
+#   same for SG. 
+strENDING="<RS" + strRND7 + "><AA0><SC77><SG80><XC100><MC2><TThrottle>"
+
+
+def signal_handler(sig, frame):
+        print('You pressed Ctrl+C!')
+        sys.exit(0)
+signal.signal(signal.SIGINT, signal_handler)
 
 mySocket = socket.socket()
 mySocket.bind((host,port))
@@ -28,6 +45,14 @@ mySocket.listen(1)
 conn, addr=mySocket.accept()
 print ("Connection Established: " + str(addr))
 
+
+# was a count of nvidia boards passed to us?
+n_argCNT = len(sys.argv) - 1
+n_NV_cnt  = 0
+if n_argCNT > 0 :
+	n_NV_cnt = int(sys.argv[1])
+
+# get CPU info first
 r_dev = os.popen("sensors | grep Core").read().splitlines()
 s_cpu = ""
 n_cpu = 0
@@ -45,31 +70,38 @@ print("max CPU temp ", m_cpu)
 print("CPU temps ",s_cpu)
 
 
-r_dev = os.popen('nvidia-smi -q -d  TEMPERATURE | grep  "GPU Current Temp"').read().splitlines()
 s_nv = ""
 s_m_nv = ""
-n_nv = 0
-m_nv = 0.0
-for l in r_dev :
-	a = l.split()
-	s_nv = s_nv + "<GT" + str(n_nv) + " " + a[4] + ">"
-	if float(a[4]) > m_nv :
-		m_nv = float(a[4])
-	n_nv = n_nv + 1
-if n_nv > 0 :
-	s_m_nv = "<TG " + "{:4.1f}".format(m_nv) + ">"
-	print("max NVidia temp ",s_m_nv)
-	print("NV temps ",s_nv)
+s_h_nv = ""
+if n_NV_cnt > 0 :
+	r_dev = os.popen('nvidia-smi -q -d  TEMPERATURE | grep  "GPU Current Temp"').read().splitlines()
+	n_nv = 0
+	m_nv = 0.0
+	for l in r_dev :
+		a = l.split()
+		s_nv = s_nv + "<GT" + str(n_nv) + " " + a[4] + ">"
+		if float(a[4]) > m_nv :
+			m_nv = float(a[4])
+		n_nv = n_nv + 1
+	if n_nv > 0 :
+		s_m_nv = "<TG " + "{:4.1f}".format(m_nv) + ">"
+		print("max NVidia temp ",s_m_nv)
+		print("NV temps ",s_nv)
+		s_h_nv = "<NV " + str(n_nv) + ">"
+hdr_out = hdr_out + s_m_nv + s_h_nv
 
-h_nv = "<NV " + str(n_nv) + ">"
-hdr_out = hdr_out + s_m_nv + h_nv
 
-r_dev = os.popen('sensors | grep "hyst "').read().splitlines()
-s_ati = ""
-for l in r_dev :
-	a = l.split()
-	print(a)
-h_ati = "<NA 0>"
+s_ati=""
+h_ati="<NA 0>"
+if n_NV_cnt == 0 :
+	n_ati = 0
+	r_dev = os.popen('sensors | grep "hyst "').read().splitlines()
+	s_ati = ""
+	for l in r_dev :
+		a = l.split()
+		n_ati = n_ati + 1
+		print(a)
+	h_ati = "<NA " + str(n_ati) + ">"
 hdr_out = hdr_out + h_ati
 
 strOUT= strPrefix + hdr_out + strPCT + s_cpu + s_nv + strENDING
