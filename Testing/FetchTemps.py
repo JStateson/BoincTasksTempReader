@@ -39,7 +39,7 @@ for l in r_dev :
 	s_cpu = s_cpu + "<CT" + str(n_cpu) + " " + c + ">" 
 	n_cpu = n_cpu + 1
 m_cpu = m_cpu / float(n_cpu)
-hdr_out = "<TC " + str(m_cpu) + ">"
+hdr_out = "<TC " + "{:4.1f}".format(m_cpu) + ">"
 print("max cpu temp ", m_cpu)
 print("CPU temps ",s_cpu)
 
@@ -55,7 +55,7 @@ for l in r_dev :
 	n_nv = n_nv + 1
 if n_nv > 0 :
 	m_nv = m_nv / float(n_nv)
-	h_m_nv = "<TG " + str(m_nv) + ">"
+	h_m_nv = "<TG " + "{:4.1f}".format(m_nv) + ">"
 	print("max NVidia temp ",h_m_nv)
 	print("NV temps ",s_nv)
 
