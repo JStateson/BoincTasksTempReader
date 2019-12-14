@@ -1,8 +1,22 @@
-This phyton3 script is being tested on Ubuntu 18.04 and uses sensors and nvidia-smi to obtain
-temperatures.  ATI is not covered yet.  The values are formatted into a string that is compatible
-with BoincTasks.  To test this program, copy it to your home folder.  Bring up Boinctasks on your windows system and make sure the linux system is identified.  On the linux system, run this script
+This pyton3 script is being tested on Ubuntu 18.04 and uses sensors and nvidia-smi to obtain
+temperatures.  The values are formatted into a string that is compatible with BoincTasks.
+To test this program, copy the bash and python script to your home folder.
+Bring up Boinctasks on your windows system and make sure the linux system is identified.
+ On the linux system, run this script and it will loop the temperature program until
+you press CTRL-C (may need to do it twice)
 
-./FetchTemps.py
+./run_cycle.sh
+
+The code as of this date 12/14/2019 handles either ATI or NVidia cards only. 
+If you have a mix of both manufactureres   ie: 3 NVidia and 1 ATI then a problem.
+Only the manufacturer that that the most cards in the system will be utilized.  
+
+
+
+EXAMPLE OF WHAT THIS PROGRAM LOOKS LIKE
+
+
+executing the python scrip "./FetchTemps" ...
 
 The program will run once and then exit. The output should look like the following
 

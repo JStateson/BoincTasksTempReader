@@ -49,16 +49,21 @@ print ("Connection Established: " + str(addr))
 # was a count of nvidia boards passed to us?
 n_argCNT = len(sys.argv) - 1
 n_NV_cnt  = 0
-if n_argCNT > 0 :
+n_ATI_cxnt = 0
+if n_argCNT != 0 :
 	n_NV_cnt = int(sys.argv[1])
+	n_ATI_cnt = int(sys.argv[2])
+	print("Expecting NV:", n_NV_cnt)
+	print("Expecting ATI:", n_ATI_cnt)
 
 # get CPU info first
 r_dev = os.popen("sensors | grep Core").read().splitlines()
 s_cpu = ""
 n_cpu = 0
 m_cpu = 0.0
+hdr_out = ""
 for l in r_dev :
-	a = l.split("+") 
+	a = l.split("+")
 	b = a[1].split(".")
 	c = b[0]
 	if float(c) > m_cpu :
@@ -72,7 +77,7 @@ print("CPU temps ",s_cpu)
 
 s_nv = ""
 s_m_nv = ""
-s_h_nv = ""
+s_h_nv = "<NV 0>"  # overwritten if NV and  need to be 0 for ATI
 if n_NV_cnt > 0 :
 	r_dev = os.popen('nvidia-smi -q -d  TEMPERATURE | grep  "GPU Current Temp"').read().splitlines()
 	n_nv = 0
@@ -88,23 +93,32 @@ if n_NV_cnt > 0 :
 		print("max NVidia temp ",s_m_nv)
 		print("NV temps ",s_nv)
 		s_h_nv = "<NV " + str(n_nv) + ">"
-hdr_out = hdr_out + s_m_nv + s_h_nv
+		gpu_temps = s_nv
+hdr_out = hdr_out + s_m_nv # + s_h_nv
 
 
 s_ati=""
-h_ati="<NA 0>"
+s_h_ati="<NA 0>"
+s_m_ati = ""
 if n_NV_cnt == 0 :
-	n_ati = 0
 	r_dev = os.popen('sensors | grep "hyst "').read().splitlines()
-	s_ati = ""
+	n_ati = 0
+	m_ati = 0
 	for l in r_dev :
-		a = l.split()
+		a = l.split("+")
+		b=a[1].split(".")
+		c=b[0].split("[,]")
+		s_ati = s_ati + "<GT" + str(n_ati) + " " + c[0] + ">"
+		if float(c[0]) > m_ati :
+			m_ati = float(c[0])
 		n_ati = n_ati + 1
-		print(a)
-	h_ati = "<NA " + str(n_ati) + ">"
-hdr_out = hdr_out + h_ati
+	if n_ati > 0 :
+		s_m_ati = "<TG " + "{:4.1f}".format(m_ati) + ">"
+		s_h_ati = "<NA " + str(n_ati) + ">"
+		gpu_temps = s_ati
+hdr_out = hdr_out + s_m_ati + s_h_nv + s_h_ati\
 
-strOUT= strPrefix + hdr_out + strPCT + s_cpu + s_nv + strENDING
+strOUT= strPrefix + hdr_out + strPCT + s_cpu + gpu_temps + strENDING
 
 while True :
 	data = conn.recv(1024).decode()
