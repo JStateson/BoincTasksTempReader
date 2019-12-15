@@ -12,6 +12,6 @@ There are readme's in each folder.
 
 Suggest you create a "temp" folder and download the entire "zip" into it.
 
-Any problem email me:  josephy$stateson.net
+Any problem email me:  josephy@stateson.net
 
 
