@@ -16,7 +16,6 @@ hostname=os.uname()[1]
 host=""  # this seems to work better than 127.0.0.1
 bMustExit = False
 
-
 # AC is active
 # TC is max temp of cpu
 # TG is max temp of gpu (what about nv and at and intel)
@@ -38,7 +37,7 @@ strENDING="<RS" + strRND7 + "><AA0><SC77><SG80><XC100><MC2><TThrottle>"
 def signal_handler(sig, frame):
 	print('You pressed Ctrl+C!')
 	bMustExit = True
-	sys.exit(0)
+	sys.exit(1)
 signal.signal(signal.SIGINT, signal_handler)
 
 mySocket = socket.socket()
@@ -56,8 +55,8 @@ n_ATI_cxnt = 0
 if n_argCNT != 0 :
 	n_NV_cnt = int(sys.argv[1])
 	n_ATI_cnt = int(sys.argv[2])
-	print("Expecting NV:", n_NV_cnt)
-	print("Expecting ATI:", n_ATI_cnt)
+#	print("Expecting NV:", n_NV_cnt)
+#	print("Expecting ATI:", n_ATI_cnt)
 
 # get CPU info first
 r_dev = os.popen("sensors | grep Core").read().splitlines()
@@ -76,8 +75,8 @@ for l in r_dev :
 	s_cpu = s_cpu + "<CT" + str(n_cpu) + " " + c + ">" 
 	n_cpu = n_cpu + 1
 hdr_out = "<TC " + "{:4.1f}".format(m_cpu) + ">"
-print("max CPU temp ", m_cpu)
-print("CPU temps ",s_cpu)
+#print("max CPU temp ", m_cpu)
+#print("CPU temps ",s_cpu)
 
 
 s_nv = ""
@@ -95,8 +94,8 @@ if n_NV_cnt>0 or n_argCNT==0 :
 		n_nv = n_nv + 1
 	if n_nv > 0 :
 		s_m_nv = "<TG " + "{:4.1f}".format(m_nv) + ">"
-		print("max NVidia temp ",s_m_nv)
-		print("NV temps ",s_nv)
+#		print("max NVidia temp ",s_m_nv)
+#		print("NV temps ",s_nv)
 		s_h_nv = "<NV " + str(n_nv) + ">"
 		gpu_temps = s_nv
 hdr_out = hdr_out + s_m_nv # + s_h_nv
@@ -127,13 +126,13 @@ strOUT= strPrefix + hdr_out + strPCT + s_cpu + gpu_temps + strENDING
 
 while True :
 	data = conn.recv(1024).decode()
-	print("from boinctasks: " + str(data) + " of length " + str(len(data)))
+#	print("from boinctasks: " + str(data) + " of length " + str(len(data)))
 	if not data :
 		break
-	if bMustExit :
-		exit(0)
 	conn.send(strOUT.encode())
-	print("sent: ",strOUT)
+	if bMustExit :
+		sys.exit(1)
+#	print("sent: ",strOUT)
 conn.close
-
+sys.exit(0)
 
