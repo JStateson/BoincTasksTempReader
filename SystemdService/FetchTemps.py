@@ -10,6 +10,7 @@ import random
 import string
 import signal
 import sys
+import logging
 
 port=31417
 hostname=os.uname()[1]
@@ -116,13 +117,16 @@ hdr_out = hdr_out + s_m_ati + s_h_nv + s_h_ati
 
 strOUT= strPrefix + hdr_out + strPCT + s_cpu + gpu_temps + strENDING
 
-while True :
+try :
 	data = conn.recv(1024).decode()
 #	print("from boinctasks: " + str(data) + " of length " + str(len(data)))
 	if not data :
-		break
+		exit(0)
 	conn.send(strOUT.encode())
 #	print("sent: ",strOUT)
-conn.close
+	conn.close
+except BaseException as e:
+	logger.error("conn failed: " + str(e))
+	exit(e)
 time.sleep(10)
 exit(0)
