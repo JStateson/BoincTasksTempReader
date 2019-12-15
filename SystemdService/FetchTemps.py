@@ -90,7 +90,7 @@ if n_NV_cnt>0 or n_argCNT==0 :
 #		print("NV temps ",s_nv)
 		s_h_nv = "<NV " + str(n_nv) + ">"
 		gpu_temps = s_nv
-hdr_out = hdr_out + s_m_nv # + s_h_nv
+hdr_out = hdr_out + s_m_nv 
 
 
 s_ati=""
@@ -112,7 +112,7 @@ if n_NV_cnt==0 or n_argCNT==0 :
 		s_m_ati = "<TG " + "{:4.1f}".format(m_ati) + ">"
 		s_h_ati = "<NA " + str(n_ati) + ">"
 		gpu_temps = s_ati
-hdr_out = hdr_out + s_m_ati + s_h_nv + s_h_ati\
+hdr_out = hdr_out + s_m_ati + s_h_nv + s_h_ati
 
 strOUT= strPrefix + hdr_out + strPCT + s_cpu + gpu_temps + strENDING
 
