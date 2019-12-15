@@ -16,4 +16,7 @@ suso systemctl stop boinctasks_temps
 
 and should start automatically on any reboot.
 
+be sure to mark all the scripts as executable with
+chmod +x *.sh
+chmod +x *.py
 
