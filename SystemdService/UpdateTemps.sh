@@ -1,6 +1,11 @@
 #!/bin/bash
 nAnyNVidia=0
 bHaveMin=0
+if [ $1 ] ; then
+ rm -f ./lockfile
+ exit 0
+fi
+
 if [ ! -e '/bin/nvidia-smi' ] ; then
 	nAnyNVidia=`nvidia-smi -L | grep -c GPU`
 fi
@@ -29,6 +34,6 @@ do
 	rtncod=`./FetchTemps.py "$nAnyNVidia" "$nAnyATI"`
 	if [ $? -ne 0 ] ; then
 		rm ./lockfile
-#		echo "failure in FetchTemps" > ./Fetch.Temps.err
+		echo "failure in FetchTemps" > ./Fetch.Temps.err
 	fi
 done
