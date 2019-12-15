@@ -2,7 +2,7 @@
 This repository contains bash scripts and python code that sends temperature
 information to BoincTasks.
 
-The folder SystemdService has an install script that creats a sevicce to run
+The folder SystemdService has an install script that creats a sevice to run
 the program on startup.  However, you must first run
  "sudo systemctl start boinctasks_temps"
 
