@@ -14,7 +14,6 @@ import sys
 port=31417
 hostname=os.uname()[1]
 host=""  # this seems to work better than 127.0.0.1
-bMustExit = False
 
 # AC is active
 # TC is max temp of cpu
@@ -123,8 +122,7 @@ while True :
 	if not data :
 		break
 	conn.send(strOUT.encode())
-	if bMustExit :
-		sys.exit(1)
 #	print("sent: ",strOUT)
 conn.close
 time.sleep(10)
+exit(0)
