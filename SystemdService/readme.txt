@@ -7,14 +7,15 @@ utilities programs "sensors" from lm-sensors needs to be
 installed.  if you have nvidia cards, then nvidia-smi also.
 
 The folder /home/YOUR-USERNAME/bin will be created unless it
-already exists and to scripts will be instaled.  A service will
-be created: /lib/systemd/system/boinctasks_temps
+already exists and two scripts will be copied into it.
+A service will be created: /lib/systemd/system/boinctasks_temps
 
 The service can be started or stopped with 
 sudo systemctl start boinctasks_temps
 suso systemctl stop boinctasks_temps
 
-and should start automatically on any reboot.
+and should start automatically on any reboot assuming
+you did the initial "start"
 
 be sure to mark all the scripts as executable with
 chmod +x *.sh

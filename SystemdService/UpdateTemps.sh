@@ -1,6 +1,7 @@
 #!/bin/bash
 nAnyNVidia=0
-bHaveMin=0
+HaveMin=0
+
 if [ $1 ] ; then
  rm -f ./lockfile
  exit 0
