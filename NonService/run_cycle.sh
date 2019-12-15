@@ -10,7 +10,7 @@ nAnyATI=`sensors | grep -c amd`
 if [ $nAnyATI -gt 0 ] && [  $nAnyNVidia -gt 0 ] ; then
   echo cannot at current time have both ATI and NVIDIA
   echo this script will choose the one with the most boards
-  if [ $nAnyAti -gt $nNVidia ] ; then
+  if [ $nAnyATI -gt $nNVidia ] ; then
    nAnyNVidia = 0
   else
    nAnyATI = 0
