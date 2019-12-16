@@ -35,6 +35,6 @@ do
 	rtncod=`./FetchTemps.py "$nAnyNVidia" "$nAnyATI"`
 	if [ $? -ne 0 ] ; then
 		rm ./lockfile
-		echo "failure in FetchTemps" > ./Fetch_Temps.err
+		echo "failure in FetchTemps $?" > ./fetchtemps.err
 	fi
 done

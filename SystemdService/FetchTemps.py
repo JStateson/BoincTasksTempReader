@@ -10,7 +10,6 @@ import random
 import string
 import signal
 import sys
-import logging
 
 port=31417
 hostname=os.uname()[1]
@@ -32,6 +31,9 @@ strRND7 = ''.join([random.choice(string.ascii_letters + string.digits) for n in 
 # probably could put average core temp into SC  but not useful and not sure what it is
 #   same for SG. 
 strENDING="<RS" + strRND7 + "><AA0><SC77><SG80><XC100><MC2><TThrottle>"
+
+# sleep here to avoid problems when problems at exit
+time.sleep(10)
 
 mySocket = socket.socket()
 mySocket.bind((host,port))
@@ -126,7 +128,6 @@ try :
 #	print("sent: ",strOUT)
 	conn.close
 except BaseException as e:
-	logger.error("conn failed: " + str(e))
-	exit(e)
-time.sleep(10)
-exit(0)
+# the e needs to be logged as str(e) to log file once I figour out how to do that
+# but I dont seem to get any errors unless I hit ctrl-c a lot
+	exit()
