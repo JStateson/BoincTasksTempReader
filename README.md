@@ -3,16 +3,14 @@ This repository contains bash scripts and python code that sends temperature
 information to BoincTasks.
 
 The folder SystemdService has an install script that creats a sevice to run
-the program on startup.  However, you must first run
- "sudo systemctl start boinctasks_temps"
-
+the program on startup.  You must first run  "sudo systemctl start boinctasks_temps"
 Before it will start up on boot.
 
-
 Before installing the service you should run the scripts in the "NonService" 
-folder to verify you have all the required files.
+folder to verify you have all the required files.  There are readme's in each folder.
+Suggest you create a "temp" folder and download the entire "zip" into it.  The install
+puts files into a bt_bin folder
 
-There are readme's in each folder.
-
-Suggest you create a "temp" folder and download the entire "zip" into it.
-
+On occassion (stuck GPU), the NVidia driver asks for a reboot.  This is tracked and
+a GPU stop running is issued to boinc.  A text message or email can be sent if you
+run the configure script before running the install script.
