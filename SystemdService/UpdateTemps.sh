@@ -1,6 +1,7 @@
 #!/bin/bash
 nAnyNVidia=0
 HaveMin=0
+HaveProblem=0
 
 if [ $1 ] ; then
  rm -f ./lockfile
@@ -8,7 +9,16 @@ if [ $1 ] ; then
 fi
 
 if [ ! -e '/bin/nvidia-smi' ] ; then
-	nAnyNVidia=`nvidia-smi -L | grep -c GPU`
+	HaveProblem=`nvidia-smi | grep -c "Reboot the system"`
+	if  [ $HaveProblem -eq 0 ] ; then
+		nAnyNVidia=`nvidia-smi -L | grep -c GPU`
+	else
+		rm -f ./lockfile
+		/usr/bin/boinccmd --set_gpu_mode never
+		ProblemSystem=`uname -n`
+		./GiveNotification.sh "$ProblemSystem" "NVidia requested a reboot"
+		exit 0
+	fi
 fi
 
 if [ ! -e '/bin/sensors' ] ; then
@@ -16,6 +26,12 @@ if [ ! -e '/bin/sensors' ] ; then
 	HaveMin=1
 	nAnyATI=`sensors | grep -c amd`
 fi
+
+# could iterate thru cnt of board and use nvidiia-smi -q -i $f  to see which board is bad
+#
+echo $nAnyNVidia > ./NumberNvidia
+echo $nAnyAti > ./NumberATI
+
 
 if [ $nAnyATI -gt 0 ] && [  $nAnyNVidia -gt 0 ] ; then
   if [ $nAnyATI -gt $nNVidia ] ; then

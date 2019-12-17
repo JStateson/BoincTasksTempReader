@@ -32,7 +32,7 @@ strRND7 = ''.join([random.choice(string.ascii_letters + string.digits) for n in 
 #   same for SG. 
 strENDING="<RS" + strRND7 + "><AA0><SC77><SG80><XC100><MC2><TThrottle>"
 
-# sleep here to avoid problems when problems at exit
+# sleep here to avoid problems at exit
 time.sleep(10)
 
 mySocket = socket.socket()
@@ -52,6 +52,18 @@ if n_argCNT != 0 :
 	n_ATI_cnt = int(sys.argv[2])
 #	print("Expecting NV:", n_NV_cnt)
 #	print("Expecting ATI:", n_ATI_cnt)
+
+# see if the driver lost track of any of the NVidia gpus
+if n_NV_cnt > 0 :
+	HaveProblem = os.popen('nvidia-smi | grep -c  "Reboot the system"').read().rstrip('\n')
+	if  HaveProblem != "0" :
+		print("Have Problem:",len(HaveProblem))
+		os.popen("/usr/bin/boinccmd --set_gpu_mode never")
+		ProblemSystem=os.popen("uname -n")
+		os.popen("./GiveNotification.sh '%s'  'NVidia requested a reboot'" % (HaveProblem))
+		n_NV_cnt = 0
+		exit(1)   # cannot continue as BT wont asks for temps anymore 
+
 
 # get CPU info first
 r_dev = os.popen("sensors | grep Core").read().splitlines()
