@@ -6,11 +6,11 @@ This has been tested under Ubuntu 18.04 and the
 utilities programs "sensors" from lm-sensors needs to be
 installed.  if you have nvidia cards, then nvidia-smi also.
 
-The folder /home/YOUR-USERNAME/bin will be created unless it
+The folder /home/YOUR-USERNAME/bt_bin will be created unless it
 already exists and all scripts will be copied into it.
 A service will be created: /lib/systemd/system/boinctasks_temps
 and a pair small scripts to start and stop the service.
-DO not download the files from GitHub into the bin folder,
+DO not download the files from GitHub into the bt_bin folder,
 use another folder.
 
 The service can be started or stopped with 

@@ -18,10 +18,10 @@ fi
 # email using the ConfigureNotifications.sh as a guide
 
 USERNAME=jstateson
+WorkingDirectory="/home/$USERNAME/bt_bin"
 
-####### do not edit anything below this line #####
+####### should not need to edit anything below this line #####
 
-WorkingDirectory="/home/$USERNAME/bin"
 
 echo "\
 [Unit]
