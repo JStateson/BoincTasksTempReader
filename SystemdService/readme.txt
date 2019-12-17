@@ -35,3 +35,6 @@ this happens and will run the GiveNotification script.
 
 Read the configuration file to see how to email a
 warning or send a text mesaage.
+To test the motification script run something like
+./GiveNotification.sh "test failure"  "this is a test"
+
