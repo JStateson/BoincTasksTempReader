@@ -31,23 +31,22 @@
 
 # if not sending a text message then just put your email in the TEXT_ADDRESS field
 
-LOGIN_NAME="----------@att.net"
-LOGIN_PASSWORD="------"
+LOGIN_NAME="username@att.net"
+LOGIN_PASSWORD="password"
 SERVER="smtp.att.yahoo.com:587"
-TEXT_ADDRESS="--------@txt.att.net"  # eg: 9876543210@txt.att.net put in +1 or whever might be neede
+TEXT_ADDRESS="phonenumber@txt.att.net"  # eg: 9876543210@txt.att.net put in +1 or whever might be neede
 
 
 ############# edit only the above 4 lines ################
 
-echo "\
-sendemail \
--f "$LOGIN_NAME"   \
--u "System \'\$1\' error: \'\$2\'"  \
--t '"$TEXT_ADDRESS"' \
--s "$SERVER"  \
--o tls=auto \
--xu "$LOGIN_NAME" \
--xp '"$LOGIN_PASSWORD"' \
--m '"\$2"'
-" > ./RunSendEmail.sh
+
+echo -n  "sendEmail " > ./RunSendEmail.sh
+echo -n  "-f $LOGIN_NAME " >> ./RunSendEmail.sh
+echo -ne "-u \\\'\$1\\\' " >> ./RunSendEmail.sh
+echo -n "-t '$TEXT_ADDRESS' " >> ./RunSendEmail.sh
+echo -n "-s $SERVER " >> ./RunSendEmail.sh
+echo -n "-o tls=auto " >> ./RunSendEmail.sh
+echo -n "-xu '$LOGIN_NAME' " >> ./RunSendEmail.sh
+echo -n "-xp '$LOGIN_PASSWORD' " >> ./RunSendEmail.sh
+echo -e "-m \\\'\$2\\\' " >> ./RunSendEmail.sh
 chmod +x RunSendEmail.sh

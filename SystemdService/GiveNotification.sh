@@ -1,5 +1,5 @@
-echo  $1:***ERROR*** $2
+echo  $1 ***ERROR*** $2
 if [ -f "./RunSendEmail.sh" ] ; then
-./RunSendEmail.sh "$1"  "$2"
+./RunSendEmail.sh '"'System:"$1"'"' '"'"$2"'"'
 fi
 
