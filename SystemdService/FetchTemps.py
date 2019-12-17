@@ -58,7 +58,7 @@ if n_NV_cnt > 0 :
 	HaveProblem = os.popen('nvidia-smi | grep -c  "Reboot the system"').read().rstrip('\n')
 	if  HaveProblem != "0" :
 		os.popen("/usr/bin/boinccmd --set_gpu_mode never")
-		ProblemSystem=os.popen("uname -n").read()
+		ProblemSystem=os.popen("uname -n").read().rstrip('\n')
 		os.popen("./GiveNotification.sh '%s'  'NVidia requested a reboot'" % (HaveProblem))
 		n_NV_cnt = 0
 		exit(1)   # cannot continue as BT wont asks for temps anymore 
