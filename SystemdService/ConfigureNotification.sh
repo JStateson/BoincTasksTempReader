@@ -1,11 +1,6 @@
-#!/bin/bash
-if [[ $EUID -ne 0 ]]; then
-   echo "This script must be run as root"
-   exit 1
-fi
 
-# edit this file to put in your email and phone info and then execute it as root
-#  sudo ./ConfigurationNotification.sh
+# edit this file to put in your email and phone info and then execute it
+#   ./ConfigurationNotification.sh
 
 # this script configures email using the sendemail program
 # http://caspian.dotconf.net/menu/Software/SendEmail/
@@ -39,7 +34,7 @@ fi
 LOGIN_NAME="----------@att.net"
 LOGIN_PASSWORD="------"
 SERVER="smtp.att.yahoo.com:587"
-TEXT_ADDRESS="--------@txt.att.net"
+TEXT_ADDRESS="--------@txt.att.net"  # eg: 9876543210@txt.att.net put in +1 or whever might be neede
 
 
 ############# edit only the above 4 lines ################
