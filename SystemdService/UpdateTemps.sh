@@ -8,7 +8,7 @@ if [ $1 ] ; then
  exit 0
 fi
 
-if [ ! -e '/bin/nvidia-smi' ] ; then
+if [ ! -f '/bin/nvidia-smi' ] ; then
 	HaveProblem=`nvidia-smi | grep -c "Reboot the system"`
 	if  [ $HaveProblem -eq 0 ] ; then
 		nAnyNVidia=`nvidia-smi -L | grep -c GPU`
@@ -21,7 +21,7 @@ if [ ! -e '/bin/nvidia-smi' ] ; then
 	fi
 fi
 
-if [ ! -e '/bin/sensors' ] ; then
+if [ ! -f '/bin/sensors' ] ; then
 	nAnyNVidia=`nvidia-smi -L | grep -c GPU`
 	HaveMin=1
 	nAnyATI=`sensors | grep -c amd`
@@ -30,7 +30,7 @@ fi
 # could iterate thru cnt of board and use nvidiia-smi -q -i $f  to see which board is bad
 #
 echo $nAnyNVidia > ./NumberNvidia
-echo $nAnyAti > ./NumberATI
+echo $nAnyATI > ./NumberATI
 
 
 if [ $nAnyATI -gt 0 ] && [  $nAnyNVidia -gt 0 ] ; then
