@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # run the following line of code and pick out a frequency that will not cause your INTEL cpu to overheat
 # cat /proc/cpuinfo |grep -i mhz

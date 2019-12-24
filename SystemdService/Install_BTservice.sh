@@ -27,13 +27,18 @@ echo "\
 [Unit]
 Description=Send Boinctask Temps
 After=network-online.target
+
 [Service]
 Type=simple
 Nice=10
 User="$USERNAME"
 WorkingDirectory="$WorkingDirectory"
 ExecStart="$WorkingDirectory"/UpdateTemps.sh
-ExecStop="$WorkingDirectory"/UpdateTemps.sh 1" > /lib/systemd/system/boinctasks_temps.service
+ExecStop="$WorkingDirectory"/UpdateTemps.sh 1
+
+#[Install]
+#WantedBy=multi-user.target" > /lib/systemd/system/boinctasks_temps.service
+
 
 if [ ! -d "$WorkingDirectory" ] ; then
 	mkdir "$WorkingDirectory"
@@ -50,3 +55,7 @@ cp *.sh "$WorkingDirectory"
 
 # cannot leave the bin directory or its files as root
 chown -R "$USERNAME:$USERNAME" "$WorkingDirectory"
+
+#sudo systemctl enable boinctasks_temps
+# bug: the port 31417 is taken upon boot but the program does not run
+# unless stopped first and then restarted.  Not what what is happening
