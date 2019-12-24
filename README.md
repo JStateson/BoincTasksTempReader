@@ -1,8 +1,10 @@
 # BoincTasks
 This repository contains bash scripts and python code that send temperature
 information to BoincTasks.  You need python version 3 and lm-sensors 3.40
+
 sudo apt install python3
 sudo apt install lm-sensors
+
 Sensors 3.40 provides CPU and ATI temperatures and is required
 
 If you are running a firewall (default in Ubuntu of OFF) then be sure to allow 
@@ -22,4 +24,5 @@ On occassion (stuck GPU), the NVidia driver asks for a reboot.  This is tracked 
 a GPU stop running is issued to boinc.  A text message or email can be sent if you
 run the configure script before running the install script.
 
-The script chg_intel_freq.sh can be used to lower the frequency if necessary.  Intel only
+The script chg_intel_freq.sh can be used to lower the frequency of the Intel CPU if it is
+overheating. Usually only one step down is needed.
