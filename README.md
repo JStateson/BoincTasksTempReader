@@ -6,7 +6,7 @@ sudo apt install python3; sudo apt install lm-sensors
 
 Sensors 3.40 provides CPU and ATI temperatures and is required
 
-If you are running a firewall (default in Ubuntu of OFF) then be sure to allow 
+If you are running a firewall (default in Ubuntu is OFF) then be sure to allow 
 port 31417 to get through the firewall
 
 The folder SystemdService has an install script that creats a sevice to run
