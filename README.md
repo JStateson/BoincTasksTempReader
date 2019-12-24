@@ -1,8 +1,8 @@
 # BoincTasks
 This repository contains bash scripts and python code that send temperature
 information to BoincTasks.  You need python version 3 and lm-sensors 3.40
-    sudo apt install python3
-    sudo apt install lm-sensors
+sudo apt install python3
+sudo apt install lm-sensors
 Sensors 3.40 provides CPU and ATI temperatures and is required
 
 If you are running a firewall (default in Ubuntu of OFF) then be sure to allow 
