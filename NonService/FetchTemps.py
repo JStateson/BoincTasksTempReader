@@ -16,6 +16,9 @@ hostname=os.uname()[1]
 host=""  # this seems to work better than 127.0.0.1
 bMustExit = False
 
+#change the below if sensors reports a different id for ATI
+ATI_KEY="edge:"
+
 # AC is active
 # TC is max temp of cpu
 # TG is max temp of gpu (what about nv and at and intel)
@@ -110,6 +113,11 @@ if n_NV_cnt==0 or n_argCNT==0 :
 	m_ati = 0
 	for l in r_dev :
 		a = l.split("+")
+#a[0] == edge: for ATI RX570
+#and  == temp1: for intel
+                print("key to find ati temps: ",a[0]," ", ATI_KEY)
+                if ATI_KEY != a[0].rstrip() :
+                        continue
 		b=a[1].split(".")
 		c=b[0].split("[,]")
 		s_ati = s_ati + "<GT" + str(n_ati) + " " + c[0] + ">"
