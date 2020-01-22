@@ -56,10 +56,11 @@ n_argCNT = len(sys.argv) - 1
 n_NV_cnt  = 0
 n_ATI_cxnt = 0
 
+bUsage= n_argCNT==3
+
 if n_argCNT != 0 :
 	n_NV_cnt = int(sys.argv[1])
 	n_ATI_cnt = int(sys.argv[2])
-bUsage= n_argCNT==3
 #	print("Expecting NV:", n_NV_cnt)
 #	print("Expecting ATI:", n_ATI_cnt)
 
@@ -86,6 +87,8 @@ for l in r_dev :
 	a = l.split("+")
 	b = a[1].split(".")
 	c = b[0]
+	if bUsage :
+		c = "0" # use 0 for CPU when doing usage or power
 	if float(c) > m_cpu :
 		m_cpu = float(c)
 	s_cpu = s_cpu + "<CT" + str(n_cpu) + " " + c + ">" 
@@ -101,10 +104,11 @@ s_h_nv = "<NV 0>"  # overwritten if NV and  need to be 0 for ATI
 Husage=0
 aVAL=4 # this is temperature index
 if bUsage :
-	aVAL=3
+	aVAL=2 # was 3 for power
 if n_NV_cnt>0 or n_argCNT==0 :
 	if bUsage :
-		r_dev = os.popen('nvidia-smi -q -d  POWER | grep  "Draw"').read().splitlines()
+		r_dev = os.popen('nvidia-smi -q -d  UTILIZATION | grep  "Gpu"').read().splitlines() # was POWER and Draw
+		aSign=" -" # use negative for usage or power
 	else :
 		r_dev = os.popen('nvidia-smi -q -d  TEMPERATURE | grep  "GPU Current Temp"').read().splitlines()
 
@@ -119,8 +123,8 @@ if n_NV_cnt>0 or n_argCNT==0 :
 		n_nv = n_nv + 1
 	if n_nv > 0 :
 		s_m_nv = "<TG " + "{:4.1f}".format(m_nv) + ">"
-		print("max NVidia temp ",s_m_nv," GPU# ",Husage)
-		print("NV temps ",s_nv)
+#		print("max NVidia temp ",s_m_nv," GPU# ",Husage)
+#		print("NV temps ",s_nv)
 		s_h_nv = "<NV " + str(n_nv) + ">"
 		gpu_temps = s_nv
 hdr_out = hdr_out + s_m_nv 
@@ -130,26 +134,35 @@ s_ati=""
 s_h_ati="<NA 0>"
 s_m_ati = ""
 if n_NV_cnt==0 or n_argCNT==0 :
-	r_dev = os.popen('sensors | grep "hyst "').read().splitlines()
+	if bUsage:
+		r_dev = os.popen('sensors | grep power1').read().splitlines()
+	else :
+		r_dev = os.popen('sensors | grep "hyst "').read().splitlines()
 	n_ati = 0
 	m_ati = 0
 	for l in r_dev :
-		a = l.split("+")
+		if bUsage :
+			a = l.split()
+			aVal=a[1]
+#			print("a:",aVal)
+		else :
+			a = l.split("+")
 #a[0] == edge: for ATI RX570
 #and  == temp1: for intel
-#		print("key: ",a[0]," ", ATI_KEY)
-		if ATI_KEY != a[0].rstrip() :
-			continue
-		b=a[1].split(".")
-		c=b[0].split("[,]")
-		s_ati = s_ati + "<GT" + str(n_ati) + " " + c[0] + ">"
-		if float(c[0]) > m_ati :
-			m_ati = float(c[0])
+#			print("key: ",a[0]," ", ATI_KEY)
+			if ATI_KEY != a[0].rstrip() :
+				continue
+			b=a[1].split(".")
+			c=b[0].split("[,]")
+			aVal=c[0]
+		s_ati = s_ati + "<GT" + str(n_ati) + " " + aVal + ">"
+		if float(aVal) > m_ati :
+			m_ati = float(aVal)
 		n_ati = n_ati + 1
-	if n_ati > 0 :
-		s_m_ati = "<TG " + "{:4.1f}".format(m_ati) + ">"
-		s_h_ati = "<NA " + str(n_ati) + ">"
-		gpu_temps = s_ati
+		if n_ati > 0 :
+			s_m_ati = "<TG " + "{:4.1f}".format(m_ati) + ">"
+			s_h_ati = "<NA " + str(n_ati) + ">"
+			gpu_temps = s_ati
 hdr_out = hdr_out + s_m_ati + s_h_nv + s_h_ati
 
 strOUT= strPrefix + hdr_out + strPCT + s_cpu + gpu_temps + strENDING
@@ -163,6 +176,6 @@ try :
 #	print("sent: ",strOUT)
 	conn.close
 except BaseException as e:
-# the e needs to be logged as str(e) to log file once I figour out how to do that
+# the e needs to be logged as str(e) to log file once I figure out how to do that
 # but I dont seem to get any errors unless I hit ctrl-c a lot
 	exit()

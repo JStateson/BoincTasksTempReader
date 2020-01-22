@@ -29,8 +29,8 @@ fi
 
 # could iterate thru cnt of board and use nvidiia-smi -q -i $f  to see which board is bad
 #
-echo $nAnyNVidia > ./NumberNvidia
-echo $nAnyATI > ./NumberATI
+#echo $nAnyNVidia > ./NumberNvidia
+#echo $nAnyATI > ./NumberATI
 
 
 if [ $nAnyATI -gt 0 ] && [  $nAnyNVidia -gt 0 ] ; then
@@ -47,7 +47,7 @@ if [ HaveMin ] ; then
 fi
 
 # uncomment below line to get bus id info
-#./FormBusIDs.py
+#./FormBusIDs.py "$nAnyNVidia" "$nAnyATI"
 
 
 while [ -e './lockfile' ]
@@ -58,5 +58,5 @@ do
 		echo "failure in FetchTemps $?" > ./fetchtemps.err
 	fi
 # uncomment the following line to alternate temperature with usage (Nvidia) or power (ATI)
-#./ShowUsage.py
+#./ShowUsage.py "$nAnyNVidia" "$nAnyATI" 1
 done

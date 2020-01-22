@@ -33,7 +33,7 @@ strRND7 = ''.join([random.choice(string.ascii_letters + string.digits) for n in 
 # AA will be marked as inactive, max and min of CPU not neeeded (XC, MC) 
 # probably could put average core temp into SC  but not useful and not sure what it is
 #   same for SG. 
-strENDING="<RS" + strRND7 + "><AA0><SC77><SG80><XC100><MC2><TThrottle>"
+strENDING="<RS" + strRND7 + "><AA0><SC99><SG99><XC100><MC2><TThrottle>"
 
 # sleep here to avoid problems at exit
 time.sleep(10)
