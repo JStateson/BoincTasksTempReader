@@ -48,7 +48,7 @@ if n_ATI_cnt>0 :
 		n_at = n_at + 1
 	out_str = out_str + "</ATI_GPU\n>"
 
-print(out_str)
-#file = open("/etc/boinc-client/cc_include.xml","w");
-#file.write(out_str)
-#file.close()
+#print(out_str)
+file = open("/etc/boinc-client/cc_include.xml","w");
+file.write(out_str)
+file.close()
