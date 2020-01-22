@@ -2,7 +2,7 @@
 This repository contains bash scripts and python code that send temperature
 information to BoincTasks.  You need python version 3 and lm-sensors 3.40
 
-sudo apt install python3; sudo apt install lm-sensors
+sudo apt install python3; sudo apt install lm-sensors; sudo apt install clinfo
 
 Sensors 3.40 provides CPU and ATI temperatures and is required
 
@@ -26,3 +26,6 @@ run the configure script before running the install script.
 The script chg_intel_freq.sh can be used to lower the frequency of the Intel CPU if it is
 overheating. Usually only one step down is needed.  Run the script with no arguments
 and if no frequencies are listed then the script probably wont work.
+
+1-22-2020 feature add:  Power and Usage can be displayed instead of temperature and
+correlated with the bus id of the graphics card.

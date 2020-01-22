@@ -58,4 +58,5 @@ chown -R "$USERNAME:$USERNAME" "$WorkingDirectory"
 
 #sudo systemctl enable boinctasks_temps
 # bug: the port 31417 is taken upon boot but the program does not run
-# unless stopped first and then restarted.  Not what what is happening
+# unless stopped first and then restarted.  Not sure what is happening
+# so not running that enable

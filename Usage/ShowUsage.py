@@ -2,6 +2,10 @@
 # -*- coding: utf-8 -*-
 #  s_ string, n_ numeric , r_ raw values, h_ header of string under construction,  m_ max value (numeric)
 
+# If a 3rd argument is supplied then show usage, not temps
+
+#nvidia-smi -q -d PIDS | grep "GPU 0"
+#GPU 00000000:0A:00.0
 
 import time
 import socket
@@ -33,7 +37,9 @@ strRND7 = ''.join([random.choice(string.ascii_letters + string.digits) for n in 
 # AA will be marked as inactive, max and min of CPU not neeeded (XC, MC) 
 # probably could put average core temp into SC  but not useful and not sure what it is
 #   same for SG. 
-strENDING="<RS" + strRND7 + "><AA0><SC77><SG80><XC100><MC2><TThrottle>"
+# found out: SC is the cutoff for cpu and SG is cutoff for gpu
+# temps over that are throttled
+strENDING="<RS" + strRND7 + "><AA0><SC99><SG99><XC100><MC2><TThrottle>"
 
 # sleep here to avoid problems at exit
 time.sleep(10)
@@ -48,11 +54,12 @@ conn, addr=mySocket.accept()
 # was a count of nvidia boards passed to us?
 n_argCNT = len(sys.argv) - 1
 n_NV_cnt  = 0
-n_ATI_cnt = 0
+n_ATI_cxnt = 0
 
 if n_argCNT != 0 :
 	n_NV_cnt = int(sys.argv[1])
 	n_ATI_cnt = int(sys.argv[2])
+bUsage= n_argCNT==3
 #	print("Expecting NV:", n_NV_cnt)
 #	print("Expecting ATI:", n_ATI_cnt)
 
@@ -91,20 +98,29 @@ hdr_out = "<TC " + "{:4.1f}".format(m_cpu) + ">"
 s_nv = ""
 s_m_nv = ""
 s_h_nv = "<NV 0>"  # overwritten if NV and  need to be 0 for ATI
+Husage=0
+aVAL=4 # this is temperature index
+if bUsage :
+	aVAL=3
 if n_NV_cnt>0 or n_argCNT==0 :
-	r_dev = os.popen('nvidia-smi -q -d  TEMPERATURE | grep  "GPU Current Temp"').read().splitlines()
+	if bUsage :
+		r_dev = os.popen('nvidia-smi -q -d  POWER | grep  "Draw"').read().splitlines()
+	else :
+		r_dev = os.popen('nvidia-smi -q -d  TEMPERATURE | grep  "GPU Current Temp"').read().splitlines()
+
 	n_nv = 0
 	m_nv = 0.0
 	for l in r_dev :
 		a = l.split()
-		s_nv = s_nv + "<GT" + str(n_nv) + " " + a[4] + ">"
-		if float(a[4]) > m_nv :
-			m_nv = float(a[4])
+		s_nv = s_nv + "<GT" + str(n_nv) + " " + a[aVAL] + ">"
+		if float(a[aVAL]) > m_nv :
+			m_nv = float(a[aVAL])
+			Husage=n_nv
 		n_nv = n_nv + 1
 	if n_nv > 0 :
 		s_m_nv = "<TG " + "{:4.1f}".format(m_nv) + ">"
-#		print("max NVidia temp ",s_m_nv)
-#		print("NV temps ",s_nv)
+		print("max NVidia temp ",s_m_nv," GPU# ",Husage)
+		print("NV temps ",s_nv)
 		s_h_nv = "<NV " + str(n_nv) + ">"
 		gpu_temps = s_nv
 hdr_out = hdr_out + s_m_nv 
@@ -120,7 +136,7 @@ if n_NV_cnt==0 or n_argCNT==0 :
 	for l in r_dev :
 		a = l.split("+")
 #a[0] == edge: for ATI RX570
-#and  == temp1: for intel 
+#and  == temp1: for intel
 #		print("key: ",a[0]," ", ATI_KEY)
 		if ATI_KEY != a[0].rstrip() :
 			continue

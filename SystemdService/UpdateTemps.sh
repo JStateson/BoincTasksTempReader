@@ -46,6 +46,10 @@ if [ HaveMin ] ; then
  echo 1 > ./lockfile
 fi
 
+# uncomment below line to get bus id info
+#./FormBusIDs.py
+
+
 while [ -e './lockfile' ]
 do
 	rtncod=`./FetchTemps.py "$nAnyNVidia" "$nAnyATI"`
@@ -53,4 +57,6 @@ do
 		rm ./lockfile
 		echo "failure in FetchTemps $?" > ./fetchtemps.err
 	fi
+# uncomment the following line to alternate temperature with usage (Nvidia) or power (ATI)
+#./ShowUsage.py
 done

@@ -38,3 +38,16 @@ warning or send a text mesaage.
 To test the motification script run something like
 ./GiveNotification.sh "test failure"  "this is a test"
 
+January 22, 2020
+
+feature added:  Ability to show usage (nvidia board) or power (ati)
+and to be able to correlate* the usage to the bus id of the GPU device
+
+To enable these features, edit the bash script "UpdateTemps.s"h and
+remove the comments on two lines of code as described.
+
+
+*bus id correlation requires using the MSboinc program.  Alternately,
+you can inspect the file at /etc/boinc-client/cc_include.xml and
+compare the order agains the values for usage or power in the
+temperature column of BoincTasks.
