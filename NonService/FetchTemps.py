@@ -115,9 +115,9 @@ if n_NV_cnt==0 or n_argCNT==0 :
 		a = l.split("+")
 #a[0] == edge: for ATI RX570
 #and  == temp1: for intel
-                print("key to find ati temps: ",a[0]," ", ATI_KEY)
-                if ATI_KEY != a[0].rstrip() :
-                        continue
+		print("key to find ati temps: ",a[0]," ", ATI_KEY)
+		if ATI_KEY != a[0].rstrip() :
+			continue
 		b=a[1].split(".")
 		c=b[0].split("[,]")
 		s_ati = s_ati + "<GT" + str(n_ati) + " " + c[0] + ">"

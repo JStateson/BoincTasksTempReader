@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #  s_ string, n_ numeric , r_ raw values, h_ header of string under construction,  m_ max value (numeric)
-
+#  nvicida cont, ati count
 
 import time
 import socket
@@ -11,7 +11,7 @@ import string
 import signal
 import sys
 
-port=31417
+port=31418
 hostname=os.uname()[1]
 host=""  # this seems to work better than 127.0.0.1
 bMustExit = False
@@ -43,11 +43,11 @@ def signal_handler(sig, frame):
 	sys.exit(0)
 signal.signal(signal.SIGINT, signal_handler)
 
-mySocket = socket.socket()
-mySocket.bind((host,port))
-mySocket.listen(1)
-conn, addr=mySocket.accept()
-print ("Connection Established: " + str(addr))
+#mySocket = socket.socket()
+#mySocket.bind((host,port))
+#mySocket.listen(1)
+#conn, addr=mySocket.accept()
+#print ("Connection Established: " + str(addr))
 
 
 # was a count of nvidia boards passed to us?
@@ -86,14 +86,15 @@ s_nv = ""
 s_m_nv = ""
 s_h_nv = "<NV 0>"  # overwritten if NV and  need to be 0 for ATI
 if n_NV_cnt>0 or n_argCNT==0 :
-	r_dev = os.popen('nvidia-smi -q -d  TEMPERATURE | grep  "GPU Current Temp"').read().splitlines()
+	r_dev = os.popen('nvidia-smi -q -d  POWER | grep  "Draw"').read().splitlines()
 	n_nv = 0
 	m_nv = 0.0
 	for l in r_dev :
 		a = l.split()
-		s_nv = s_nv + "<GT" + str(n_nv) + " " + a[4] + ">"
-		if float(a[4]) > m_nv :
-			m_nv = float(a[4])
+#		print("a3 " + a[3])
+		s_nv = s_nv + "<GT" + str(n_nv) + " " + a[3] + ">"
+		if float(a[3]) > m_nv :
+			m_nv = float(a[3])
 		n_nv = n_nv + 1
 	if n_nv > 0 :
 		s_m_nv = "<TG " + "{:4.1f}".format(m_nv) + ">"
