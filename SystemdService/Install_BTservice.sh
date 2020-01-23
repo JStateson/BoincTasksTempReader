@@ -17,10 +17,17 @@ fi
 # edit the file GiveNotification.sh to work with your exiting
 # email using the ConfigureNotifications.sh as a guide
 
+# CHANGE THE FOLLOWING TO YOUR OWN USERNAME
 USERNAME=jstateson
 WorkingDirectory="/home/$USERNAME/bt_bin"
 
 ####### should not need to edit anything below this line #####
+
+
+echo username is $USERNAME
+echo destinatioin folder is $WorkingDirectory
+read -n 1 -s -r -p "Press any key to continue.  CTRL-C aborts"
+echo
 
 
 echo "\

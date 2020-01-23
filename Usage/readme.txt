@@ -1,6 +1,6 @@
 The folder is used to develop and test the scripts used to obtain bus id, power and usage for GPUs
 
-Requred programs lm_sensors and nvidia-smi
+Requred programs lm_sensors, nvidia-smi and clinfo
 
 
 
@@ -35,4 +35,4 @@ To test the program, be sure that BoincTasks is running and monitoring your syst
 ./ShowUsage.py <number nvidia board>  <number ati boards) [1]
 
 If a 3rd argument is supplied then usage or power is displayed
-If no argument then temperature is displayed
+If no arguement then temperature is displayed

@@ -1,10 +1,14 @@
 The Scripts in this folder intall bash and python script that
-route temperatures to boinctasks.
+route temperatures (or wattage) to boinctasks.
+
+NOTICE NOTICE NOTICE
+YOU MUST EDIT THE INSTALLATION SCRIPT TO PUT YOUR USERNAME IN
 
 You must edit the install script and put in your username.
 This has been tested under Ubuntu 18.04 and the 
 utilities programs "sensors" from lm-sensors needs to be
 installed.  if you have nvidia cards, then nvidia-smi also.
+Put in clinfo also if you want bud id correlation
 
 The folder /home/YOUR-USERNAME/bt_bin will be created unless it
 already exists and all scripts will be copied into it.
@@ -15,8 +19,8 @@ use another folder.
 
 The service can be started or stopped with 
 sudo systemctl start boinctasks_temps
-sudo systemctl stop boinctasks_temps
-The scripts "tstart.sh" asnd "tstop.sh" can be used also
+sudo systemctl stop boinctasks_temps  The 
+scripts "start_temps.sh" asnd "halt_temps.sh" can be used
 
 
 The service will start automatically on any reboot assuming
@@ -43,7 +47,7 @@ January 22, 2020
 feature added:  Ability to show wattage for nvidia and ati and
 to be able to correlate* the usage to the bus id of the GPU device.
 
-To enable these features, edit the bash script "pdateTemps.sh and
+To enable these features, edit the bash script "UpdateTemps.sh and
 add true or false to indicate which one or both are to be seen.
 Also remove the comment to allow the bus id to be written to
 the /usr/boinc-client/cc_include.xml file.  When both are shown
@@ -51,7 +55,7 @@ the temperatures for the CPU (if any running) are set to 0 to
 indicate that wattage is being displayed instead of temperatures.
 
 
-*bus id correlation requires using the MSboinc program.  Alternately,
+* bus id correlation requires using the MSboinc program.  Alternately,
 you can inspect the file at /etc/boinc-client/cc_include.xml and
-compare the order agains the values for usage or power in the
+compare the order agains the values for power in the
 temperature column of BoincTasks.
