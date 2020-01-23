@@ -3,6 +3,25 @@ nAnyNVidia=0
 HaveMin=0
 HaveProblem=0
 
+
+# change the next two lines to show either one or both
+bShowTemps=true
+bShowWatts=false
+
+bEnableTemps=1
+bEnableWatts=2
+
+iWhatToShow=0
+
+if $bShowTemps  ; then
+        (( iWhatToShow|=bEnableTemps ))
+fi
+
+if $bShowWatts  ; then
+	(( iWhatToShow|=bEnableWatts ))
+fi
+
+
 if [ $1 ] ; then
  rm -f ./lockfile
  exit 0
@@ -49,14 +68,32 @@ fi
 # uncomment below line to get bus id info
 #./FormBusIDs.py "$nAnyNVidia" "$nAnyATI"
 
-
+iLast=0
+iShow=0
 while [ -e './lockfile' ]
 do
-	rtncod=`./FetchTemps.py "$nAnyNVidia" "$nAnyATI"`
+	if [ $iWhatToShow -eq 3 ] ; then
+		(( iShow=iLast ))
+		(( iLast+=1 ))
+		if [ $iLast -eq 2 ] ; then
+			iLast=0
+		fi
+	else
+		if $bShowTemps ; then
+			iShow=0
+		fi
+		if $bShowWatts ; then
+			iShow=1
+		fi
+	fi
+showusage=""
+if [ $iShow -eq 1 ] ; then
+	showusage="1"
+fi
+#echo ./FetchTemps.py "$nAnyNVidia" "$nAnyATI" "$showusage"
+	rtncod=`./FetchTemps.py "$nAnyNVidia" "$nAnyATI" "$showusage"`
 	if [ $? -ne 0 ] ; then
 		rm ./lockfile
 		echo "failure in FetchTemps $?" > ./fetchtemps.err
 	fi
-# uncomment the following line to alternate temperature with usage (Nvidia) or power (ATI)
-#./ShowUsage.py "$nAnyNVidia" "$nAnyATI" 1
 done
