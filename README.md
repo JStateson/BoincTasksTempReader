@@ -27,5 +27,5 @@ The script chg_intel_freq.sh can be used to lower the frequency of the Intel CPU
 overheating. Usually only one step down is needed.  Run the script with no arguments
 and if no frequencies are listed then the script probably wont work.
 
-1-22-2020 feature add:  Power and Usage can be displayed instead of temperature and
+1-22-2020 feature add:  Power can be displayed instead of temperature and
 correlated with the bus id of the graphics card.

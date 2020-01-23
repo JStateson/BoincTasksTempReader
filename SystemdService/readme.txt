@@ -40,11 +40,15 @@ To test the motification script run something like
 
 January 22, 2020
 
-feature added:  Ability to show usage (nvidia board) or power (ati)
-and to be able to correlate* the usage to the bus id of the GPU device
+feature added:  Ability to show wattage for nvidia and ati and
+to be able to correlate* the usage to the bus id of the GPU device.
 
-To enable these features, edit the bash script "UpdateTemps.s"h and
-remove the comments on two lines of code as described.
+To enable these features, edit the bash script "pdateTemps.sh and
+add true or false to indicate which one or both are to be seen.
+Also remove the comment to allow the bus id to be written to
+the /usr/boinc-client/cc_include.xml file.  When both are shown
+the temperatures for the CPU (if any running) are set to 0 to
+indicate that wattage is being displayed instead of temperatures.
 
 
 *bus id correlation requires using the MSboinc program.  Alternately,
