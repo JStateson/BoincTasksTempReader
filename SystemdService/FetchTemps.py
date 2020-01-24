@@ -100,7 +100,7 @@ hdr_out = "<TC " + "{:4.1f}".format(m_cpu) + ">"
 
 s_nv = ""
 s_m_nv = ""
-s_h_nv = "<NV 0>"  # overwritten if NV and  need to be 0 for ATI
+s_h_nv = "<NV 0><TG 37>"  # overwritten if NV and  need to be 0 for ATI MUST HAVE A VALUE FOR TG!!
 Husage=0
 aVAL=4 # this is temperature index
 if bUsage :
@@ -174,6 +174,11 @@ try :
 	if not data :
 		exit(0)
 	conn.send(strOUT.encode())
+	while True :   # need to clear "ack" as port can be busy for a few seconds
+		data = conn.recv(1024).decode()
+#		print("from boinctasks: " + str(data) + " of length " + str(len(data)))
+		if not data :
+			break
 #	print("sent: ",strOUT)
 	conn.close
 except BaseException as e:

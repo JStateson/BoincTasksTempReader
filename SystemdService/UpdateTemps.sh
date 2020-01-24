@@ -91,7 +91,7 @@ if [ $iShow -eq 1 ] ; then
 	showusage="1"
 fi
 #echo ./FetchTemps.py "$nAnyNVidia" "$nAnyATI" "$showusage"
-	rtncod=`./FetchTemps.py "$nAnyNVidia" "$nAnyATI" "$showusage"`
+	./FetchTemps.py "$nAnyNVidia" "$nAnyATI" "$showusage"
 	if [ $? -ne 0 ] ; then
 		rm ./lockfile
 		echo "failure in FetchTemps $?" > ./fetchtemps.err
