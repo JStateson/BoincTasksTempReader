@@ -66,7 +66,7 @@ if [ HaveMin ] ; then
 fi
 
 # uncomment below line to get bus id info
-#./FormBusIDs.py "$nAnyNVidia" "$nAnyATI"
+#./MakeTable.py
 
 iLast=0
 iShow=0
