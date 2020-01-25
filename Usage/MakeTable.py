@@ -12,6 +12,7 @@ import sys
 import os.path
 from os import path
 
+
 bNVidia = path.exists("/usr/bin/nvidia-smi")
 nAMD = os.popen("sensors | grep -c amd").read().rstrip('\n')
 bAMD = (nAMD != "0")
@@ -39,6 +40,18 @@ board_pci_ati=[]
 board_names_intel=[]
 board_pci_intel=[]
 
+coproc_nv=[]
+coproc_amd=[]
+
+def lookup_nv(busid ):
+	n=len(coproc_nv)
+	for i in range(n) :
+		if busid == coproc_nv[i] :
+			return(i)
+	print("software error 1")
+	exit(O)
+
+
 def first_amd(aline ):
 	a=aline.split()
 	try :
@@ -46,6 +59,15 @@ def first_amd(aline ):
 	except ValueError:
 		inx = a.index("(AMD)")
 	return(inx+1)
+
+
+def toHex(s):
+	a = int(s)
+	b = str(hex(a))
+	c = b.replace("0x","")
+	if a <= 15 :
+		 c="0"+c+":00.0"
+	return(c.upper())
 
 if bNVidia : 
 	name_dev = os.popen('nvidia-smi -L').read().replace("GeForce","").splitlines()
@@ -66,6 +88,15 @@ if bNVidia :
 		board_pci_nv.append(a[0])
 #	print(nv_bus)
 # ['01:00.0', '02:00.0', '03:00.0', '04:00.0', '05:00.0', '08:00.0', '0A:00.0', '0B:00.0', '0E:00.0']
+
+	r_dev = os.popen('grep "<bus_id>" "/var/lib/boinc/coproc_info.xml"').read().replace("<",">").splitlines()
+	for l in r_dev :
+		a=l.split('>')
+		h=toHex(a[2])
+		coproc_nv.append(h)
+#	print(coproc_nv)
+
+
 	n=len(board_names_nv)
 	if n != len(board_pci_nv) :
 		print("number of NV boards ",n," does not match the number of bus ids ",len(board_pci_nv))
@@ -73,12 +104,11 @@ if bNVidia :
 	else :
 		for i in range(n) :
 			out_xml+= "<" + str(nGPUx) + ">"
-			out_xml+= str(i) + " -1 " + board_pci_nv[i] + " NV " + board_names_nv[i]
+			j = lookup_nv(board_pci_nv[i])
+			out_xml+= str(i) + " " + str(j) + " " + board_pci_nv[i] + " NV " + board_names_nv[i]
 			out_xml+= "</" + str(nGPUx) + ">"
 			out_xml += "\n"
 			nGPUx+= 1
-
-
 
 if bAMD :
 	name_dev = os.popen('clinfo | grep -i "Board Name"').read().replace("Series","").splitlines()
@@ -111,7 +141,7 @@ if bAMD :
 			out_xml+= "\n"
 			nGPUx+= 1
 
-cc_include="<devmap>\n<Num_GPUs>" + str(nGPUx-1) + "</Num_GPUS>\n"  + out_xml + "</devmap>\n"
+cc_include="<devmap>\n<Num_GPUs>" + str(nGPUx-1) + "</Num_GPUs>\n"  + out_xml + "</devmap>\n"
 
 if os.geteuid() != 0:
 	print(cc_include)
