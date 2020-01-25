@@ -18,7 +18,7 @@ nAMD = os.popen("sensors | grep -c amd").read().rstrip('\n')
 bAMD = (nAMD != "0")
 
 if bNVidia :
-	n=r_dev = os.popen('nvidia-smi --version | grep -c "has failed because"').read().rstrip("\n")
+	n=os.popen('nvidia-smi --version | grep -c "has failed because"').read().rstrip("\n")
 	bNVidia=(n=="0")
 
 n_item=0
