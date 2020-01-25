@@ -21,10 +21,6 @@ if bNVidia :
 	n=r_dev = os.popen('nvidia-smi --version | grep -c "has failed because"').read().rstrip("\n")
 	bNVidia=(n=="0")
 
-
-
-
-
 n_item=0
 ati_out=[]
 nv_out=[]
@@ -66,8 +62,8 @@ def toHex(s):
 	b = str(hex(a))
 	c = b.replace("0x","")
 	if a <= 15 :
-		 c="0"+c+":00.0"
-	return(c.upper())
+		 c="0"+c
+	return(c.upper()+":00.0")
 
 if bNVidia : 
 	name_dev = os.popen('nvidia-smi -L').read().replace("GeForce","").splitlines()
