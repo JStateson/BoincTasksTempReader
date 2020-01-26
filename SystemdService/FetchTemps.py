@@ -56,7 +56,7 @@ n_argCNT = len(sys.argv) - 1
 n_NV_cnt  = 0
 n_ATI_cxnt = 0
 
-bUsage= n_argCNT==3
+bUsage= sys.argv[3]=="1"
 
 if n_argCNT != 0 :
 	n_NV_cnt = int(sys.argv[1])
@@ -124,8 +124,8 @@ if n_NV_cnt>0 or n_argCNT==0 :
 		n_nv = n_nv + 1
 	if n_nv > 0 :
 		s_m_nv = "<TG " + "{:4.1f}".format(m_nv) + ">"
-		print("max NVidia temp ",s_m_nv," GPU# ",Husage)
-		print("NV temps ",s_nv)
+#		print("max NVidia temp ",s_m_nv," GPU# ",Husage)
+#		print("NV temps ",s_nv)
 		s_h_nv = "<NV " + str(n_nv) + ">"
 		gpu_temps = s_nv
 hdr_out = hdr_out + s_m_nv 

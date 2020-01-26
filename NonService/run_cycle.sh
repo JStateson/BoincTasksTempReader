@@ -1,13 +1,13 @@
 #!/bin/bash
 echo Press CTRL-C to exit.  may need to do it twice
 nAnyNVidia=0
-if [ ! -e '/usr/bin/nvidia-smi' ] ; then
-	nAnyNVidia=`nvidia-smi -L | grep -c GPU`
+if [ -f '/usr/bin/nvidia-smi' ] ; then
+	nAnyNVidia=`nvidia-smi -L | grep -c GPU | tr -d "\n"`
 fi
 
-nAnyATI=`sensors | grep -c amd`
+nAnyATI=`sensors | grep -c amd | tr -d "\n"`
 
-if [ $nAnyATI -gt 0 ] && [  $nAnyNVidia -gt 0 ] ; then
+if [[ "$nAnyATI" -gt "0" ]] && [[  "$nAnyNVidia" -gt "0" ]] ; then
   echo cannot at current time have both ATI and NVIDIA
   echo this script will choose the one with the most boards
   if [ $nAnyATI -gt $nNVidia ] ; then
@@ -28,7 +28,8 @@ function ctrl_c() {
 
 while [ $bRun -eq 1 ];
 do
-	rtncod=`./FetchTemps.py "$nAnyNVidia" "$nAnyATI"`
+#	echo "$nAnyNVidia" "$nAnyATI"
+	./FetchTemps.py "$nAnyNVidia" "$nAnyATI" 0
 	if [ $? -eq 1 ]; then
 		 break
 	fi

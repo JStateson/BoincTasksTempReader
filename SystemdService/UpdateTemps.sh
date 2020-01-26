@@ -1,5 +1,6 @@
 #!/bin/bash
 nAnyNVidia=0
+nAnyATI=0
 HaveMin=0
 HaveProblem=0
 
@@ -27,10 +28,10 @@ if [ $1 ] ; then
  exit 0
 fi
 
-if [ ! -f '/usr/bin/nvidia-smi' ] ; then
-	HaveProblem=`nvidia-smi | grep -c "Reboot the system"`
-	if  [ $HaveProblem -eq 0 ] ; then
-		nAnyNVidia=`nvidia-smi -L | grep -c GPU`
+if [ -f '/usr/bin/nvidia-smi' ] ; then
+	HaveProblem=`nvidia-smi | grep -c "Reboot the system" | tr -d "\n"`
+	if [[ "$HaveProblem"  -eq "0" ]] ; then
+		nAnyNVidia=`nvidia-smi -L | grep -c GPU | tr -d "\n"`
 	else
 		rm -f ./lockfile
 		/usr/bin/boinccmd --set_gpu_mode never
@@ -41,18 +42,18 @@ if [ ! -f '/usr/bin/nvidia-smi' ] ; then
 fi
 
 if [ ! -f '/usr/bin/sensors' ] ; then
-	nAnyNVidia=`nvidia-smi -L | grep -c GPU`
+	nAnyNVidia=`nvidia-smi -L | grep -c GPU | tr -d "\n"`
 	HaveMin=1
-	nAnyATI=`sensors | grep -c amd`
+	nAnyATI=`sensors | grep -c amd | tr -d "\n"`
 fi
 
 # could iterate thru cnt of board and use nvidiia-smi -q -i $f  to see which board is bad
 #
-#echo $nAnyNVidia > ./NumberNvidia
-#echo $nAnyATI > ./NumberATI
+echo -n $nAnyNVidia > ./NumberNvidia
+echo -n $nAnyATI > ./NumberATI
 
-
-if [ $nAnyATI -gt 0 ] && [  $nAnyNVidia -gt 0 ] ; then
+# pick the biggest one until I figure out how to report both to boinctasks
+if [[ "$nAnyATI" -gt "0" ]] && [[  "$nAnyNVidia" -gt "0" ]] ; then
   if [ $nAnyATI -gt $nNVidia ] ; then
    nAnyNVidia = 0
   else
@@ -62,7 +63,7 @@ fi
 
 
 if [ HaveMin ] ; then
- echo 1 > ./lockfile
+ echo -n 1 > ./lockfile
 fi
 
 # uncomment below line to get bus id info
@@ -86,9 +87,11 @@ do
 			iShow=1
 		fi
 	fi
-showusage=""
+
 if [ $iShow -eq 1 ] ; then
 	showusage="1"
+else
+	showusage="0"
 fi
 #echo ./FetchTemps.py "$nAnyNVidia" "$nAnyATI" "$showusage"
 	./FetchTemps.py "$nAnyNVidia" "$nAnyATI" "$showusage"
