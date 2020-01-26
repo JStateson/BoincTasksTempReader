@@ -1,7 +1,7 @@
 #!/bin/bash
 echo Press CTRL-C to exit.  may need to do it twice
 nAnyNVidia=0
-if [ ! -e '/bin/nvidia-smi' ] ; then
+if [ ! -e '/usr/bin/nvidia-smi' ] ; then
 	nAnyNVidia=`nvidia-smi -L | grep -c GPU`
 fi
 

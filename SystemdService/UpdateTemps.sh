@@ -27,7 +27,7 @@ if [ $1 ] ; then
  exit 0
 fi
 
-if [ ! -f '/bin/nvidia-smi' ] ; then
+if [ ! -f '/usr/bin/nvidia-smi' ] ; then
 	HaveProblem=`nvidia-smi | grep -c "Reboot the system"`
 	if  [ $HaveProblem -eq 0 ] ; then
 		nAnyNVidia=`nvidia-smi -L | grep -c GPU`
@@ -40,7 +40,7 @@ if [ ! -f '/bin/nvidia-smi' ] ; then
 	fi
 fi
 
-if [ ! -f '/bin/sensors' ] ; then
+if [ ! -f '/usr/bin/sensors' ] ; then
 	nAnyNVidia=`nvidia-smi -L | grep -c GPU`
 	HaveMin=1
 	nAnyATI=`sensors | grep -c amd`
