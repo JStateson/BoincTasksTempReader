@@ -22,6 +22,29 @@ host=""  # this seems to work better than 127.0.0.1
 #change the below if sensors reports a different id for ATI
 ATI_KEY="edge:"
 
+
+nv_decode=[]
+nv_t_unsorted=[]  # nvidia temps unsorted
+bHaveDecode=os.path.isfile("NV_DECODE")
+if bHaveDecode :
+	with open("NV_DECODE","r") as f:
+		for l in f:
+			a=l.strip("\n")
+			nv_decode.append(a)
+#			print(nv_decode)
+	f.close
+
+def lookup_nv(id) :
+	n=len(nv_decode)
+	for i in range (n) :
+		j=int(nv_decode[i])
+#		print("id: " , id ,"  i: ", i, " r: ", j)
+		if int(id) == j :
+			print("id of ", id , " found as ",i)
+			return i
+	print("software error 2")
+	exit(0)
+
 # AC is active
 # TC is max temp of cpu
 # TG is max temp of gpu (what about nv and at and intel)
@@ -42,7 +65,7 @@ strRND7 = ''.join([random.choice(string.ascii_letters + string.digits) for n in 
 strENDING="<RS" + strRND7 + "><AA0><SC99><SG99><XC100><MC2><TThrottle>"
 
 # sleep here to avoid problems at exit
-time.sleep(10)
+time.sleep(1)
 
 mySocket = socket.socket()
 mySocket.bind((host,port))
@@ -117,11 +140,15 @@ if n_NV_cnt>0 or n_argCNT==0 :
 	m_nv = 0.0
 	for l in r_dev :
 		a = l.split()
-		s_nv = s_nv + "<GT" + str(n_nv) + " " + a[aVAL] + ">"
+		nv_t_unsorted.append(a[aVAL]);
 		if float(a[aVAL]) > m_nv :
 			m_nv = float(a[aVAL])
 			Husage=n_nv
 		n_nv = n_nv + 1
+	for l in range (n_nv) :
+		if bHaveDecode :
+			i_nv = lookup_nv(l)
+		s_nv = s_nv + "<GT" + str(l) + " " + nv_t_unsorted[i_nv] + ">"
 	if n_nv > 0 :
 		s_m_nv = "<TG " + "{:4.1f}".format(m_nv) + ">"
 #		print("max NVidia temp ",s_m_nv," GPU# ",Husage)
@@ -179,7 +206,7 @@ try :
 #		print("from boinctasks: " + str(data) + " of length " + str(len(data)))
 		if not data :
 			break
-#	print("sent: ",strOUT)
+	print("sent: ",strOUT)
 	conn.close
 except BaseException as e:
 # the e needs to be logged as str(e) to log file once I figure out how to do that

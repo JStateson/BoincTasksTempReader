@@ -39,6 +39,10 @@ board_pci_intel=[]
 coproc_nv=[]
 coproc_amd=[]
 
+
+nv_decode=[] # use this to look boinc id to get card id
+nv_string=""
+
 def lookup_nv(busid ):
 	n=len(coproc_nv)
 	for i in range(n) :
@@ -82,7 +86,7 @@ if bNVidia :
 	for l in nv_dev :
 		a=l.split()
 		board_pci_nv.append(a[0])
-#	print(nv_bus)
+
 # ['01:00.0', '02:00.0', '03:00.0', '04:00.0', '05:00.0', '08:00.0', '0A:00.0', '0B:00.0', '0E:00.0']
 
 	r_dev = os.popen('grep "<bus_id>" "/var/lib/boinc/coproc_info.xml"').read().replace("<",">").splitlines()
@@ -90,7 +94,7 @@ if bNVidia :
 		a=l.split('>')
 		h=toHex(a[2])
 		coproc_nv.append(h)
-#	print(coproc_nv)
+#	print(coproc_nv)  # these are the bus id
 
 
 	n=len(board_names_nv)
@@ -98,14 +102,18 @@ if bNVidia :
 		print("number of NV boards ",n," does not match the number of bus ids ",len(board_pci_nv))
 		exit(1)
 	else :
-		for i in range(n) :
-			out_xml+= "<" + str(nGPUx) + ">"
-			j = lookup_nv(board_pci_nv[i])
-			out_xml+= str(i) + " " + str(j) + " " + board_pci_nv[i] + " NV " + board_names_nv[i]
-			out_xml+= "</" + str(nGPUx) + ">"
-			out_xml += "\n"
-			nGPUx+= 1
-
+		with open("NV_DECODE","w") as f:
+			for i in range(n) :
+				out_xml+= "<" + str(nGPUx) + ">"
+				j = lookup_nv(board_pci_nv[i])
+				print(j,file=f)
+				nv_decode.append(j)
+				nv_string+= str(j) + " "
+				out_xml+= str(i) + " " + str(j) + " " + board_pci_nv[i] + " NV " + board_names_nv[i]
+				out_xml+= "</" + str(nGPUx) + ">"
+				out_xml += "\n"
+				nGPUx+= 1
+		f.close
 if bAMD :
 	name_dev = os.popen('clinfo | grep -i "Board Name"').read().replace("Series","").splitlines()
 	inx=first_amd(name_dev[0])
@@ -116,7 +124,7 @@ if bAMD :
 		for i in range(n-1):
 			 aDevice+= "-" + a[inx+i+1]
 		board_names_ati.append(aDevice)
-#print(board_names_ati)
+#		print(board_names_ati)
 # Device Topology (AMD)                           PCI-E, 01:00.0
 	nAMD = os.popen('clinfo | grep -i "Device Topology (AMD)"').read().splitlines()
 	for l in nAMD :
@@ -124,7 +132,7 @@ if bAMD :
 		n=len(a)-1
 		aDevice=a[n]
 		board_pci_ati.append(aDevice)
-#	print(board_pci_ati)
+	print(board_pci_ati)
 	n = len(board_names_ati)
 	if n != len(board_pci_ati) :
 		print("number of ati boards ",n," does not match the number of bus ids ",len(board_pci_ati))
