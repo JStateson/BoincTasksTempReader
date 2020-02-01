@@ -35,16 +35,16 @@ The script chg_intel_freq.sh can be used to lower the frequency of the Intel CPU
 overheating. Usually only one step down is needed.  Run the script with no arguments
 and if no frequencies are listed then the script wont work.
 
-1-22-2020 feature add:  Wattach can be displayed instead of temperature and
+1-22-2020 feature add:  Wattage can be displayed instead of temperature and
 correlated with the bus id of the graphics card.  Edit the script UpdateTemps.sh and
-set the values of bShowTemps and / or bShowWatts.  If you have different quality video
+set the values of bShowTemps and/or bShowWatts.  If you have different quality video
 boards then the BOINC board IDs will not match the NVidia linux kernel IDs so 
 you must uncomment the line in the script UpdateTemps.sh so that MakeTable.py can run
 This python script requires the clnfo tool to map the IDs to the correct coprocessor
 
 *QUICK TEST*
 Bring up boinctasks and select your linux system so the tasks are visible
-If you have 2 NVidia board, no ATI and want to see temps
+If you have 2 NVidia board, no ATI and want to see temps:
 ```
 ./FetchTemps.py 2 0 0
 ```
@@ -52,7 +52,16 @@ To see wattage in place of temps
 ```
 ./FetchTemps.py 2 0 1
 ```
-If your NVidia boards are not identical then first run to build a translation table
+If your NVidia boards are not identical then first run the following to build a translation table
 ```
 sudo ./MakeTable.py
+```
+For a pair of ATI boards:
+```
+./FetchTemps.py 0 2 0
+```
+To start or stop the service
+```
+sudo ./start_temps.sh
+sudo ./halt_temps.sh
 ```
