@@ -1,10 +1,13 @@
 # Tools send temperature information to BoincTasks for display from Linux systems
 Optionally Wattage can be sent or both wattage and temps can be alternatately displayed
 
-This repository contains bash scripts and python code that send temperature
-information to BoincTasks.  You need python version 3,  lm-sensors 3.40 and
-clinfo.  sudo apt install python3; sudo apt install lm-sensors; sudo apt install clinfo
-
+This repository contains bash scripts and python code that send temperature info
+to BoincTasks.  You need python version 3,  lm-sensors 3.40 and (optional) clinfo.  
+```
+sudo apt-get install python3;
+sudo apt-get install m-sensors;
+sudo apt-get install clinfo
+```
 Sensors 3.40 provide CPU and ATI temperatures and nvidia-smi provides NVidia temps
 
 If you are running a firewall (default in Ubuntu is OFF) then be sure to allow 
@@ -14,11 +17,14 @@ The folder SystemdService has an install script that creats a sevice to run
 the program on startup.  You must first run  "sudo systemctl start boinctasks_temps"
 Currently, the script does not start on boot so you need to start it manually
 
-Before installing the service you should run the scripts in the "NonService" 
-folder to verify you have all the required files.  There are readmes in each folder.
-Suggest you create a "temp" folder and download the entire "zip" into it.  The install
-puts files into the home/username/bt_bin folder.  The testing folder has debugging info
-and runs like the NonService but shows temp values
+The tar file contains the Service install and has the newest code.
+Before downloading the tarball run these
+```
+nvidia-smi
+sensors
+clinfo
+python3 --version
+```
 
 On occassion (stuck GPU), the NVidia driver asks for a reboot.  This is tracked and
 a GPU stop running is issued to boinc.  A text message or email can be sent if you
@@ -34,4 +40,19 @@ correlated with the bus id of the graphics card.  Edit the script UpdateTemps.sh
 set the values of bShowTemps and / or bShowWatts.  If you have different quality video
 boards then the BOINC board IDs will not match the NVidia linux kernel IDs so 
 you must uncomment the line in the script UpdateTemps.sh so that MakeTable.py can run
-This python script requires the clnfo tool.
+This python script requires the clnfo tool to map the IDs to the correct coprocessor
+
+*QUICK TEST*
+Bring up boinctasks and select your linux system so the tasks are visible
+If you have 2 NVidia board, no ATI and want to see temps
+```
+./FetchTemps.py 2 0 0
+```
+To see wattage in place of temps
+```
+./FetchTemps.py 2 0 1
+```
+If your NVidia boards are not identical then first run to build a translation table
+```
+sudo ./MakeTable.py
+```
