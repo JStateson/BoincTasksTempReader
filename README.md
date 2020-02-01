@@ -44,7 +44,7 @@ This python script requires the clnfo tool to map the IDs to the correct coproce
 
 *QUICK TEST*
 Bring up boinctasks and select your linux system so the tasks are visible
-If you have 2 NVidia board, no ATI and want to see temps:
+If you have 2 NVidia board, no ATI and want to see temps (there is a 10 second delay):
 ```
 ./FetchTemps.py 2 0 0
 ```
