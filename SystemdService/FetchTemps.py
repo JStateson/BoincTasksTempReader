@@ -40,7 +40,7 @@ def lookup_nv(id) :
 		j=int(nv_decode[i])
 #		print("id: " , id ,"  i: ", i, " r: ", j)
 		if int(id) == j :
-			print("id of ", id , " found as ",i)
+#			print("id of ", id , " found as ",i)
 			return i
 	print("software error 2")
 	exit(0)
@@ -65,7 +65,7 @@ strRND7 = ''.join([random.choice(string.ascii_letters + string.digits) for n in 
 strENDING="<RS" + strRND7 + "><AA0><SC99><SG99><XC100><MC2><TThrottle>"
 
 # sleep here to avoid problems at exit
-time.sleep(1)
+time.sleep(10)
 
 mySocket = socket.socket()
 mySocket.bind((host,port))
@@ -146,6 +146,7 @@ if n_NV_cnt>0 or n_argCNT==0 :
 			Husage=n_nv
 		n_nv = n_nv + 1
 	for l in range (n_nv) :
+		i_nv = l
 		if bHaveDecode :
 			i_nv = lookup_nv(l)
 		s_nv = s_nv + "<GT" + str(l) + " " + nv_t_unsorted[i_nv] + ">"
@@ -206,7 +207,7 @@ try :
 #		print("from boinctasks: " + str(data) + " of length " + str(len(data)))
 		if not data :
 			break
-	print("sent: ",strOUT)
+#	print("sent: ",strOUT)
 	conn.close
 except BaseException as e:
 # the e needs to be logged as str(e) to log file once I figure out how to do that
