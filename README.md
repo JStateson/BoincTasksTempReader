@@ -4,8 +4,8 @@ Optionally Wattage can be sent or both wattage and temps can be alternatately di
 This repository contains bash scripts and python code that send temperature info
 to BoincTasks.  You need python version 3,  lm-sensors 3.40 and (optional) clinfo.  
 ```
-sudo apt-get install python3;
-sudo apt-get install m-sensors;
+sudo apt-get install python3
+sudo apt-get install m-sensors
 sudo apt-get install clinfo
 ```
 Sensors 3.40 provide CPU and ATI temperatures and nvidia-smi provides NVidia temps
