@@ -5,10 +5,10 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 
-# edit this file and put in your username
+# edit this file to change the location of the tools
 
 
-# IN ADDITION to putting in  username, if you
+# if you
 # wish to have the program send a message in event of a
 # probllem then READ the script ConfigureNotifications.sh
 # and IF NECESSARY run that script BEFORE running this one
@@ -17,8 +17,8 @@ fi
 # edit the file GiveNotification.sh to work with your exiting
 # email using the ConfigureNotifications.sh as a guide
 
-# CHANGE THE FOLLOWING TO YOUR OWN USERNAME
-USERNAME=jstateson
+# CHANGE bt_bin TO THE LOCATION YOU PREFER
+USERNAME="$USER"
 WorkingDirectory="/home/$USERNAME/bt_bin"
 
 ####### should not need to edit anything below this line #####
@@ -64,6 +64,6 @@ cp *.sh "$WorkingDirectory"
 chown -R "$USERNAME:$USERNAME" "$WorkingDirectory"
 
 #sudo systemctl enable boinctasks_temps
-# bug: the port 31417 is taken upon boot but the program does not run
+# bug in above code: the port 31417 is taken upon boot but the program does not run
 # unless stopped first and then restarted.  Not sure what is happening
-# so not running that enable
+# so not running that enable script
