@@ -65,3 +65,4 @@ To start or stop the service
 sudo ./start_temps.sh
 sudo ./halt_temps.sh
 ```
+use "wget https://github.com/JStateson/BoincTasksTempReader/raw/refs/heads/master/systemd.tar.gz"
