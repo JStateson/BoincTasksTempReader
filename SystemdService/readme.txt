@@ -61,3 +61,23 @@ indicate that wattage is being displayed instead of temperatures.
  /etc/boinc-client/cc_include.xml and
 compare the order against the values for power in the
 temperature column of BoincTasks.
+====9/2/2025===
+==========to install as service======
+chmod +x /home/jstateson/bt_bin/start_temp.sh
+sudo nano /etc/systemd/system/start_temp.service
+add the following-------
+[Unit]
+Description=Start Temp Script
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/yourusername/bt_bin/start_temps.sh
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target
+-------
+then run
+sudo systemctl daemon-reload
+sudo systemctl enable start_temp.service
