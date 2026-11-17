@@ -18,7 +18,7 @@ fi
 # email using the ConfigureNotifications.sh as a guide
 
 # CHANGE bt_bin TO THE LOCATION YOU PREFER
-USERNAME="$USER"
+USERNAME="$SUDO_USER"
 WorkingDirectory="/home/$USERNAME/bt_bin"
 
 ####### should not need to edit anything below this line #####
@@ -34,6 +34,7 @@ echo "\
 [Unit]
 Description=Send Boinctask Temps
 After=network-online.target
+Wants=network-online.target
 
 [Service]
 Type=simple
@@ -42,6 +43,10 @@ User="$USERNAME"
 WorkingDirectory="$WorkingDirectory"
 ExecStart="$WorkingDirectory"/UpdateTemps.sh
 ExecStop="$WorkingDirectory"/UpdateTemps.sh 1
+Restart=on-failure
+RestartSec=10
+TimeoutStopSec=20
+
 
 #[Install]
 #WantedBy=multi-user.target" > /lib/systemd/system/boinctasks_temps.service
